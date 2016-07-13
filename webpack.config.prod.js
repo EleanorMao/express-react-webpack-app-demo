@@ -1,6 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
-var entryPath = path.join(__dirname, 'client');
+var entryPath = path.join(__dirname, 'source');
 var outputPath = path.join(__dirname, 'public');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var getFileNamePlugin = require("./lib/getFileNamePlugin");
@@ -8,7 +8,8 @@ var getFileNamePlugin = require("./lib/getFileNamePlugin");
 module.exports =
 {   name: 'client',
     entry: {
-        main: path.join(entryPath, 'main.js')
+        index: path.join(entryPath, 'Index.js'),
+        test: path.join(entryPath, 'Test.js')
     },
     output:{
         path: outputPath,
@@ -32,7 +33,7 @@ module.exports =
     },
     plugins: [
         new webpack.NoErrorsPlugin(),
-        new ExtractTextPlugin("stylesheets/style.[hash].css", {
+        new ExtractTextPlugin("stylesheets/[name].[hash].css", {
             allChunks: true
         }),
         getFileNamePlugin

@@ -1,7 +1,8 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 require('../public/stylesheets/style.css');
 
-module.exports = React.createClass({
+var Index = React.createClass({
 	getInitialState: function getInitialState() {
     	return { counter: 0 };
   	},
@@ -15,3 +16,9 @@ module.exports = React.createClass({
 		return <div onClick={this.handleClick}>counter: {this.state.counter}</div>
 	}
 })
+
+module.exports = Index;
+
+try{
+  ReactDOM.render(<Index />, document.getElementById('content'));
+}catch(e){}

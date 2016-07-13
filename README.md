@@ -1,28 +1,25 @@
 # express-react-webpack-app-demo
 A express-react-webpack app demo for dianjia admin
 
-####Todo
-may add react-router instead of register router one by one
 
-####Start App 
+####Start App
 ```
   npm install
   npm run build
   npm start
 ```
-  
+
 
 ####Dev Mode
 ```
   npm run dev // full stack live reload
-```  
+```
 
 
 ####(:3 っ)3≡･◦∴* ◦º. *.•。[][▓▓]
 ```
 - app
 -- bin //启动项
----- client //客户端js文件出口
 -- lib //express和webpack的依赖项
 ---- public //静态资源
 ------ javascripts //js资源
@@ -44,7 +41,7 @@ may add react-router instead of register router one by one
 It's a json about js and css names which will create after webpack pack those resource.
 ```
 {
-  [name]: { 
+  [name]: {
     "js": [.., .., ..,]
     "css": [.., .., ..]
   }

@@ -1,6 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
-var entryPath = path.join(__dirname, 'client');
+var entryPath = path.join(__dirname, 'source');
 var outputPath = path.join(__dirname, 'public', 'javascripts', 'client');
 var publicPath = 'http://localhost:' + (process.env.PORT || 3000);
 var hotMiddlewareScript = 'webpack-hot-middleware/client?' + publicPath;
@@ -11,11 +11,12 @@ var getFileNamePlugin = require("./lib/getFileNamePlugin");
 module.exports =
 {  name: 'client',
     entry: {
-        main: [path.join(entryPath, 'main.js'), hotDevServer, hotMiddlewareScript]
+        index: [path.join(entryPath, 'Index.js'), hotDevServer, hotMiddlewareScript],
+        test: [path.join(entryPath, 'Test.js'), hotDevServer, hotMiddlewareScript],
     },
 	output:{
 		path: outputPath,
-		filename: 'javascripts/client/[name].[hash].js',
+		filename: 'javascripts/client/[name].js',
 		publicPath: '/'
 	},
     devtool: 'source-map',
@@ -39,7 +40,7 @@ module.exports =
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
-        new ExtractTextPlugin("stylesheets/style.[hash].css", {
+        new ExtractTextPlugin("stylesheets/[name].css", {
             allChunks: true
         }),
         getFileNamePlugin

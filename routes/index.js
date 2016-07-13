@@ -10,13 +10,13 @@ var data = require('../server/fileName.json');
 router.get('/', function(req, res, next) {
 	var html = ReactDOMServer.renderToString(<Index />);
     var test = '123';
-  	res.render('index', {title: '阿毛喵喵',content: html,test: test, scripts: data.main.js, csses: data.main.css});
+  	res.render('index', {title: '阿毛喵喵',content: html,test: test, scripts: data.index.js, csses: data.index.css});
 });
 
 router.get('/test', function(req, res, next) {
     var html =123;
     var test = ReactDOMServer.renderToString(<Test />);
-    res.render('index', {content: html, test: test});
+    res.render('index', {title: '阿毛喵喵', content: html, test: test, scripts: data.test.js, csses: data.test.css});
 });
 
 module.exports = router;
