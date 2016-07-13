@@ -18,7 +18,7 @@
     "node-jsx": "^0.13.3",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
-    "serve-favicon": "~2.3.0",
+    "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
     "reload": "^1.0.0",
