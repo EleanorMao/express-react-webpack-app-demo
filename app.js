@@ -1,5 +1,5 @@
 require('node-jsx').install(); //enable use jsx in express
-require('./lib/ignore').install({extension： '.css'}); //ignore css
+require('./lib/ignore').install('.css'); //ignore css
 
 var path = require('path');
 var express = require('express');
