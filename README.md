@@ -3,7 +3,7 @@ A express-react-webpack app demo for dianjia admin
 
 ####Todo
 update getFileNamePlugin
-
+proxy
 
 ####Start App
 ```
