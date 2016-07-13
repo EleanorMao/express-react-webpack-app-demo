@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title} !{test}
+  div#content !{content}
+  each item in scripts
+    script(src= item)
+  if env
+    script(src="/reload/reload.js")
