@@ -1,5 +1,5 @@
 require('node-jsx').install(); //enable use jsx in express
-require('./lib/ignore').install('.css'); //ignore css
+require('./middleware/ignore').install('.css'); //ignore css
 
 var path = require('path');
 var express = require('express');
@@ -42,6 +42,7 @@ if(app.get('env') === 'dev'){
       publicPath: webpackDevConfig.output.publicPath,
       noInfo: true,
       hot: true,
+      proxy:{},
       stats: {
           colors: true
       }

@@ -4,7 +4,11 @@ var React = require('react');
 var ReactDOMServer = require('react-dom/server');
 var Index = require('../source/Index');
 var Test = require('../source/Test');
-var data = require('../server/fileName.json');
+if(process.env.NODE_ENV === 'env'){
+    var data = require('../server/static.dev.json');
+}else{
+    var data = require('../server/static.prod.json');
+}
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

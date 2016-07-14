@@ -2,7 +2,6 @@
 A express-react-webpack app demo for dianjia admin
 
 ####Todo
-update getFileNamePlugin
 proxy
 
 ####Start App
@@ -23,7 +22,7 @@ proxy
 ```
 - app
 -- bin //启动项
--- lib //express和webpack的依赖项
+-- middleware //中间件
 ---- public //静态资源
 ------ javascripts //js资源
 -------- client //客户端用
@@ -40,11 +39,26 @@ proxy
 ```
 
 
-####fileName.json
-It's a json about js and css names which will create after webpack pack those resource.
+####getFileNamePlugin
+webpack plugin
+to print packed files name
+
+params
+- fileName (String)
+- filePath (String) must be a relative path; default is path.join(__dirname, '..', 'server');
+- extensions (String | Array)
+
+```
+new GetFileNamePlugin({
+    fileName: 'static.dev.json',
+    extensions: ['js', 'css', 'map']
+    })
+```
+
+output is like
 ```
 {
-  [name]: {
+  [chunkName]: {
     "js": [.., .., ..,]
     "css": [.., .., ..]
   }

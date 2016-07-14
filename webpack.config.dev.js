@@ -6,11 +6,12 @@ var publicPath = 'http://localhost:' + (process.env.PORT || 3000);
 var hotMiddlewareScript = 'webpack-hot-middleware/client?' + publicPath;
 var hotDevServer = 'webpack/hot/dev-server';
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var getFileNamePlugin = require("./lib/getFileNamePlugin");
+var GetFileNamePlugin = require("./middleware/getFileNamePlugin");
 
 module.exports =
 {  name: 'client',
     entry: {
+        common: ['react', 'react-dom'],
         index: [path.join(entryPath, 'Index.js'), hotDevServer, hotMiddlewareScript],
         test: [path.join(entryPath, 'Test.js'), hotDevServer, hotMiddlewareScript],
     },
@@ -43,6 +44,6 @@ module.exports =
         new ExtractTextPlugin("stylesheets/[name].css", {
             allChunks: true
         }),
-        getFileNamePlugin
+        new GetFileNamePlugin({fileName: 'static.dev.json'})
     ]
 }
