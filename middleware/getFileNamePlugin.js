@@ -1,7 +1,8 @@
 var fs = require('fs');
 var path = require('path');
+var defPath = path.join(__dirname);
 function GetFileNamePlugin(options){
-    this.filePath = options.filePath || '../server/';
+    this.filePath = options.filePath || defPath;
     this.fileName = options.fileName || 'fileName.json';
     this.extensions = options.extensions || ['js', 'css'];
 }
@@ -10,7 +11,7 @@ GetFileNamePlugin.prototype.apply = function(compiler){
     var output = {};
     var extensions = this.extensions;
     extensions = extensions instanceof Array ? extensions : [ extensions ];
-    var filePath = path.join(__dirname, this.filePath, this.fileName);
+    var filePath = path.join(this.filePath, this.fileName);
     compiler.plugin('done', function(status){
         var assetsByChunkName = status.toJson().assetsByChunkName;
         for(var chunkName in assetsByChunkName){

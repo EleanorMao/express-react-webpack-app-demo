@@ -45,7 +45,7 @@ to print packed files name
 
 params
 - fileName (String)
-- filePath (String) must be a relative path; default is path.join(__dirname, '..', 'server');
+- filePath (String) default is path.join(__dirname);
 - extensions (String | Array)
 
 ```

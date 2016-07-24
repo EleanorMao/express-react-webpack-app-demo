@@ -2,6 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 var entryPath = path.join(__dirname, 'source');
 var outputPath = path.join(__dirname, 'public');
+var filePath = path.join(__dirname, 'server');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var GetFileNamePlugin = require("./middleware/getFileNamePlugin");
 
@@ -36,6 +37,6 @@ module.exports =
         new ExtractTextPlugin("stylesheets/[name].[hash].css", {
             allChunks: true
         }),
-        new GetFileNamePlugin({fileName: 'static.prod.json'})
+        new GetFileNamePlugin({fileName: 'static.prod.json', filePath: filePath})
     ]
 }

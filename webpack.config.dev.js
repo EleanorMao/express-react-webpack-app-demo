@@ -2,6 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 var entryPath = path.join(__dirname, 'source');
 var outputPath = path.join(__dirname, 'public', 'javascripts', 'client');
+var filePath = path.join(__dirname, 'server');
 var publicPath = 'http://localhost:' + (process.env.PORT || 3000);
 var hotMiddlewareScript = 'webpack-hot-middleware/client?' + publicPath;
 var hotDevServer = 'webpack/hot/dev-server';
@@ -44,6 +45,6 @@ module.exports =
         new ExtractTextPlugin("stylesheets/[name].css", {
             allChunks: true
         }),
-        new GetFileNamePlugin({fileName: 'static.dev.json'})
+        new GetFileNamePlugin({fileName: 'static.dev.json', filePath: filePath})
     ]
 }
