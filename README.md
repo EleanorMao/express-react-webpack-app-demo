@@ -24,11 +24,8 @@ proxy
 -- bin //启动项
 -- middleware //中间件
 ---- public //静态资源
------- javascripts //js资源
--------- client //客户端用
--------- lib //js依赖
------- images //图片资源
------- stylesheets //样式资源
+------ lib //不需资源
+------ assets //打包后资源
 ---- routers //注册路由
 ------ index.js //分类注册
 ------ dashbroad.js

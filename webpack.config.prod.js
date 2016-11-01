@@ -1,22 +1,30 @@
 var path = require('path');
 var webpack = require('webpack');
-var entryPath = path.join(__dirname, 'source');
-var outputPath = path.join(__dirname, 'public');
+var outputPath = path.join(__dirname, 'public', 'assets');
 var filePath = path.join(__dirname, 'server');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var GetFileNamePlugin = require("./middleware/getFileNamePlugin");
+var ParseEntry = require('./middleware/ParsePlugin').parseEntry;
+var Entries = ParseEntry(path.join(__dirname, "source"), {
+    ignore: ['lib']
+});
 
 module.exports =
-{   name: 'client',
-    entry: {
-        index: path.join(entryPath, 'Index.js'),
-        test: path.join(entryPath, 'Test.js')
-    },
-    output:{
+{
+    name: 'client',
+    entry: Object.assign({Vendor: ['react', 'react-dom']}, Entries),
+    output: {
         path: outputPath,
-        filename: 'javascripts/client/[name].[hash].js',
+        filename: '[name].[hash].js',
+        publicPath: '/assets'
     },
-    module:{
+    resolve: {
+        alias: {
+            'react': path.join(__dirname, 'node_modules', 'react'),
+            'react-dom': path.join(__dirname, 'node_modules', 'react-dom')
+        }
+    },
+    module: {
         loaders: [
             {
                 test: /\.(js|jsx)?$/,
@@ -27,8 +35,8 @@ module.exports =
                 }
             }
             , {
-                test: /\.css?$/,
-                loader: ExtractTextPlugin.extract("style-loader", "css-loader")
+                test: /\.(less|css)?$/,
+                loader: ExtractTextPlugin.extract(['css', 'less'])
             }
         ]
     },
@@ -37,6 +45,11 @@ module.exports =
         new ExtractTextPlugin("stylesheets/[name].[hash].css", {
             allChunks: true
         }),
-        new GetFileNamePlugin({fileName: 'static.prod.json', filePath: filePath})
+        new webpack.optimize.CommonsChunkPlugin('Vendor', 'Vendor.[hash].js'),
+        new GetFileNamePlugin({
+            fileName: 'static.prod.json',
+            publicPath: 'assets/',
+            filePath: filePath
+        })
     ]
 }

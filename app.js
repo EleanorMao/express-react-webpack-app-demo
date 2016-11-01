@@ -1,5 +1,5 @@
 require('node-jsx').install(); //enable use jsx in express
-require('./middleware/ignore').install('.css'); //ignore css
+require('./middleware/ignorePlugin').install(); //ignore css
 
 var path = require('path');
 var express = require('express');
@@ -25,32 +25,38 @@ app.locals.env = env;
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 app.use(cookieParser());
 
 
-if(app.get('env') === 'dev'){
+if (app.get('env') === 'dev') {
 
   var webpack = require('webpack'),
-      webpackDevMiddleware = require('webpack-dev-middleware'),
-      webpackHotMiddleware = require('webpack-hot-middleware'),
-      webpackDevConfig = require('./webpack.config.dev.js');
-
-  var compiler = webpack(webpackDevConfig);
+    webpackDevMiddleware = require('webpack-dev-middleware'),
+    webpackHotMiddleware = require('webpack-hot-middleware'),
+    webpackDevConfig = require('./webpack.config.dev.js'),
+    compiler = webpack(webpackDevConfig);
 
   app.use(webpackDevMiddleware(compiler, {
-      publicPath: webpackDevConfig.output.publicPath,
-      noInfo: true,
-      hot: true,
-      proxy:{},
-      stats: {
-          colors: true
-      }
+    publicPath: webpackDevConfig.output.publicPath,
+    serverSideRender: true,
+    noInfo: true,
+    hot: true,
+    proxy: {},
+    stats: {
+      colors: true
+    }
   }));
 
   app.use(webpackHotMiddleware(compiler));
+  
+  app.get('/lib/:file', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'lib', req.params.file))
+  });
 
-}else{
+} else {
 
   app.use(express.static(path.join(__dirname, 'public'))); //production use static
 

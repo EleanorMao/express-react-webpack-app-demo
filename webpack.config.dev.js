@@ -1,50 +1,50 @@
 var path = require('path');
 var webpack = require('webpack');
-var entryPath = path.join(__dirname, 'source');
-var outputPath = path.join(__dirname, 'public', 'javascripts', 'client');
-var filePath = path.join(__dirname, 'server');
-var publicPath = 'http://localhost:' + (process.env.PORT || 3000);
-var hotMiddlewareScript = 'webpack-hot-middleware/client?' + publicPath;
-var hotDevServer = 'webpack/hot/dev-server';
+var outputPath = path.join(__dirname, 'public', 'assets');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var GetFileNamePlugin = require("./middleware/getFileNamePlugin");
+var ParseEntry = require('./middleware/ParsePlugin').parseEntry;
+var Entries = ParseEntry(path.join(__dirname, "source"), {
+    ignore: ['lib']
+});
 
-module.exports =
-{  name: 'client',
-    entry: {
-        common: ['react', 'react-dom'],
-        index: [path.join(entryPath, 'Index.js'), hotDevServer, hotMiddlewareScript],
-        test: [path.join(entryPath, 'Test.js'), hotDevServer, hotMiddlewareScript],
+module.exports = {
+    name: 'client',
+    entry: Object.assign({Vendor: ['react', 'react-dom']}, Entries),
+    output: {
+        path: outputPath,
+        filename: '[name].[hash].js',
+        publicPath: '/assets'
     },
-	output:{
-		path: outputPath,
-		filename: 'javascripts/client/[name].js',
-		publicPath: '/'
-	},
     devtool: 'source-map',
-	module:{
-		loaders: [
+    resolve: {
+        alias: {
+            'react': path.join(__dirname, 'node_modules', 'react'),
+            'react-dom': path.join(__dirname, 'node_modules', 'react-dom')
+        }
+    },
+    module: {
+        loaders: [
             {
                 test: /\.(js|jsx)?$/,
                 exclude: /node_modules/,
                 loader: "babel",
                 query: {
-                	presets: ['es2015', 'react']
-				}
+                    presets: ['es2015', 'react']
+                }
             }
             , {
-                test: /\.css?$/,
-                loader: ExtractTextPlugin.extract("style-loader", "css-loader?source-map")
+                test: /\.(less|css)?$/,
+                loader: ExtractTextPlugin.extract(['css', 'less'])
             }
         ]
-	},
+    },
     plugins: [
-        new webpack.optimize.OccurenceOrderPlugin(),
-        new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
-        new ExtractTextPlugin("stylesheets/[name].css", {
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.optimize.OccurenceOrderPlugin(),
+        new webpack.optimize.CommonsChunkPlugin('Vendor', 'Vendor.[hash].js'),
+        new ExtractTextPlugin("[name].[hash].css", {
             allChunks: true
-        }),
-        new GetFileNamePlugin({fileName: 'static.dev.json', filePath: filePath})
+        })
     ]
 }

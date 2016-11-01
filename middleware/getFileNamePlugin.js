@@ -1,41 +1,43 @@
 var fs = require('fs');
 var path = require('path');
-var defPath = path.join(__dirname);
-function GetFileNamePlugin(options){
+var defPath = __dirname;
+
+function GetFileNamePlugin(options) {
     this.filePath = options.filePath || defPath;
+    this.publicPath = options.publicPath || '';
     this.fileName = options.fileName || 'fileName.json';
     this.extensions = options.extensions || ['js', 'css'];
 }
 
-GetFileNamePlugin.prototype.apply = function(compiler){
-    var output = {};
-    var extensions = this.extensions;
-    extensions = extensions instanceof Array ? extensions : [ extensions ];
-    var filePath = path.join(this.filePath, this.fileName);
-    compiler.plugin('done', function(status){
+GetFileNamePlugin.prototype.apply = function (compiler) {
+    var output = {},
+        extensions = this.extensions,
+        filePath = path.join(this.filePath, this.fileName),
+        publicPath = this.publicPath;
+    extensions = extensions instanceof Array ? extensions : [extensions];
+    compiler.plugin('done', function (status) {
         var assetsByChunkName = status.toJson().assetsByChunkName;
-        for(var chunkName in assetsByChunkName){
-            var assets = assetsByChunkName[chunkName];
-            var newOutput = output[chunkName] = {};
-            for(var i = 0; i < assets.length; i++){
+        for (var chunkName in assetsByChunkName) {
+            var assets = assetsByChunkName[chunkName],
+                newOutput = output[chunkName] = {};
+            assets = assets instanceof Array ? assets : [assets];
+            for (var i = 0; i < assets.length; i++) {
                 var item = assets[i];
-                var value = assets[i].split('.');
-                var extension = value[value.length - 1];
-                for(var j = 0; j < extensions.length; j++){
-                    if(extension === extensions[j]){
-                        if(!newOutput[extensions[j]]){
-                            newOutput[extensions[j]] = []
-                        }
-                        newOutput[extensions[j]].push(item);
+                for (var j = 0; j < extensions.length; j++) {
+                    if (!newOutput[extensions[j]]) {
+                        newOutput[extensions[j]] = []
+                    }
+                    if (item.endsWith(extensions[j])) {
+                        newOutput[extensions[j]].push(path.join('/', publicPath, item));
                     }
                 }
             }
         }
         fs.writeFileSync(
-                filePath,
-                JSON.stringify(output)
-            )
+            filePath,
+            JSON.stringify(output)
+        )
     })
-}
+};
 
 module.exports = GetFileNamePlugin;

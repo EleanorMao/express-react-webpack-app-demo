@@ -1,10 +1,14 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title} !{test}
-  div#content !{content}
-  each item in scripts
-    script(src= item)
-  if env
-    script(src="/reload/reload.js")
+    h1= title
+    p Welcome to #{title}
+    div#header !{header}
+    div#menu !{menu}
+    div#content !{content}
+    script.
+        var app = {dev: !{!!dev}};
+    if env
+        script(src="/reload/reload.js")
+    each item in scripts
+        script(src= item)

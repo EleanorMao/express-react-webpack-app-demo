@@ -1,8 +1,9 @@
 doctype html
 html
-  head
-    title= title
-    each item in csses
-        link(rel='stylesheet', href= item)
-  body
-    block content
+    head
+        title= title
+        if csses
+            each item in csses
+                link(rel='stylesheet', href= item)
+    body
+        block content
